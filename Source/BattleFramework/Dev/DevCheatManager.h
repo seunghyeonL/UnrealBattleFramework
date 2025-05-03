@@ -12,6 +12,5 @@ class BATTLEFRAMEWORK_API UDevCheatManager : public UCheatManager
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(exec)
 	virtual void God() override;
 };
