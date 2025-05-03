@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Data/EnumTypes.h"
 #include "ControlComponentBase.generated.h"
 
 // DECLARE_DELEGATE(FOnStateComponentReady);
@@ -24,8 +25,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	// UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
-	// TArray<EBehaviorEffect> ActiveBehaviorEffects;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	TArray<EControlEffectType> ActiveBehaviorEffects;
 
 public:
 	// Called every frame

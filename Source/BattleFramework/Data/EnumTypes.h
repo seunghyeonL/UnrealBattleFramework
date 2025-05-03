@@ -3,8 +3,6 @@
 #include "CoreMinimal.h"
 #include "EnumTypes.generated.h"
 
-// static_cast<uint8>(EConrolEffectType::Max);
-
 UENUM(BlueprintType)
 enum class EControlEffectType : uint8
 {
