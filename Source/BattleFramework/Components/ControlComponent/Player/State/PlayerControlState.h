@@ -3,14 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/Object.h"
+#include "PlayerControlStateBase.h"
 #include "PlayerControlState.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTLEFRAMEWORK_API UPlayerControlState : public UObject
+class BATTLEFRAMEWORK_API UPlayerControlState : public UPlayerControlStateBase
 {
 	GENERATED_BODY()
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ACharacter> OwnerCharacter;
+	
+public:
+	virtual void Move(const FInputActionValue& Value) override;
+	virtual void Look(const FInputActionValue& Value) override;
+	virtual void Dash() override;
+	virtual void Sprint() override;
+	virtual void Parry() override;
+	virtual void BaseAttack() override;
+	virtual void WeaponSkill() override;
+	virtual void MagicSkill() override;
+
+	FORCEINLINE void SetOwnerCharacter(ACharacter* NewOwnerCharacter) { OwnerCharacter = NewOwnerCharacter; }
 };

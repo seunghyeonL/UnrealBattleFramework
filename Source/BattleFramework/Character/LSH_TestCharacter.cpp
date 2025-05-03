@@ -1,6 +1,7 @@
 ﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "LSH_TestCharacter.h"
+#include "DebugHelper.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -10,6 +11,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Components/ControlComponent/Player/PlayerControlComponent.h"
+#include "Components/ControlComponent/Player/State/PlayerControlState.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ALSH_TestCharacter
@@ -48,6 +51,10 @@ ALSH_TestCharacter::ALSH_TestCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	// Battle Components
+	ControlComponent = CreateDefaultSubobject<UPlayerControlComponent>(TEXT("ControlComponent"));
+	
+	
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -71,18 +78,69 @@ void ALSH_TestCharacter::NotifyControllerChanged()
 
 void ALSH_TestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
+	InputComponent = PlayerInputComponent;
+	
+	if (ControlComponent->bIsComponentReady)
+	{
+		BindInputFunctions();
+	}
+	else
+	{
+		ControlComponent->OnStateComponentReady.BindUObject(this, &ALSH_TestCharacter::BindInputFunctions);
+	}
+}
+
+void ALSH_TestCharacter::BindInputFunctions()
+{
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
-		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALSH_TestCharacter::Move);
-
+		if (IsValid(MoveAction))
+		{
+			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALSH_TestCharacter::Move);	
+		}
+		
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALSH_TestCharacter::Look);
+		if (IsValid(LookAction))
+		{
+			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALSH_TestCharacter::Look);
+		}
+
+		// Dash
+		if (IsValid(DashAction))
+		{
+			EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::Dash);
+		}
+
+		// Dash
+		if (IsValid(SprintAction))
+		{
+			EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::Sprint);
+		}
+
+		// Parry
+		if (IsValid(ParryAction))
+		{
+			EnhancedInputComponent->BindAction(ParryAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::Parry);
+		}
+
+		// BaseAttack
+		if (IsValid(BaseAttackAction))
+		{
+			EnhancedInputComponent->BindAction(BaseAttackAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::BaseAttack);
+		}
+
+		// WeaponSkill
+		if (IsValid(WeaponSkillAction))
+		{
+			EnhancedInputComponent->BindAction(WeaponSkillAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::WeaponSkill);
+		}
+
+		// MagicSkill
+		if (IsValid(MagicSkillAction))
+		{
+			EnhancedInputComponent->BindAction(MagicSkillAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::MagicSkill);
+		}
 	}
 	else
 	{
@@ -92,36 +150,98 @@ void ALSH_TestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void ALSH_TestCharacter::Move(const FInputActionValue& Value)
 {
-	// input is a Vector2D
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
 	{
-		// find out which way is forward
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
+		ControlState->Move(Value);
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::Move : Invalid ControlState."));
 	}
 }
 
 void ALSH_TestCharacter::Look(const FInputActionValue& Value)
 {
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
 	{
-		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		ControlState->Look(Value);
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::Look : Invalid ControlState."));
 	}
 }
+
+void ALSH_TestCharacter::Dash()
+{
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	{
+		ControlState->Dash();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::Dash : Invalid ControlState."));
+	}
+}
+
+void ALSH_TestCharacter::Sprint()
+{
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	{
+		ControlState->Sprint();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::Sprint : Invalid ControlState."));
+	}
+}
+
+void ALSH_TestCharacter::Parry()
+{
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	{
+		ControlState->Parry();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::Parry : Invalid ControlState."));
+	}
+}
+
+void ALSH_TestCharacter::BaseAttack()
+{
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	{
+		ControlState->BaseAttack();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::BaseAttack : Invalid ControlState."));
+	}
+}
+
+void ALSH_TestCharacter::WeaponSkill()
+{
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	{
+		ControlState->WeaponSkill();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::WeaponSkill : Invalid ControlState."));
+	}
+}
+
+void ALSH_TestCharacter::MagicSkill()
+{
+	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	{
+		ControlState->MagicSkill();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("ALSH_TestCharacter::MagicSkill : Invalid ControlState."));
+	}
+}
+
+

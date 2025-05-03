@@ -34,3 +34,18 @@ void UControlComponentBase::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
+void UControlComponentBase::ActivateControlEffect(EControlEffectType ControlEffectType)
+{
+	// 하위 클래스에서 구현
+}
+
+void UControlComponentBase::ActivateControlEffectWithDuration(EControlEffectType ControlEffectType, float Duration)
+{
+	// 하위 클래스에서 구현
+}
+
+void UControlComponentBase::DeactivateControlEffect(EControlEffectType ControlEffectType)
+{
+	// 하위 클래스에서 구현
+}
+

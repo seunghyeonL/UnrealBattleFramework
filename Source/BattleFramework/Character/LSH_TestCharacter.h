@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "LSH_TestCharacter.generated.h"
 
+class UPlayerControlComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -14,9 +15,15 @@ struct FInputActionValue;
 
 
 UCLASS()
-class BATTLEFRAMEWORK_API ALSH_TestCharacter : public ACharacter
+class BATTLEFRAMEWORK_API ALSH_TestCharacter :
+public ACharacter
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UPlayerControlComponent> ControlComponent;
+	
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
@@ -29,10 +36,6 @@ class BATTLEFRAMEWORK_API ALSH_TestCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
-
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
@@ -41,18 +44,46 @@ class BATTLEFRAMEWORK_API ALSH_TestCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	// Dash Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DashAction;
+	
+	// Sprint Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
+	// Parry Input Action 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ParryAction;
+	
+	// BaseAttack Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* BaseAttackAction;
+
+	// WeaponSkill Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* WeaponSkillAction;
+
+	// MagicSkill Input Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* MagicSkillAction;
+	
 public:
 	ALSH_TestCharacter();
-	
 
 protected:
-
-	/** Called for movement input */
+	// Bind After ControlComponent Ready
+	void BindInputFunctions();
+	
+	// Input Binding Functions
 	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+	void Dash();
+	void Sprint();
+	void Parry();
+	void BaseAttack();
+	void WeaponSkill();
+	void MagicSkill();
 
 protected:
 
