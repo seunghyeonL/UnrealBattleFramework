@@ -74,16 +74,6 @@ public:
 protected:
 	// Bind After ControlComponent Ready
 	void BindInputFunctions();
-	
-	// Input Binding Functions
-	void Move(const FInputActionValue& Value);
-	void Look(const FInputActionValue& Value);
-	void Dash();
-	void Sprint();
-	void Parry();
-	void BaseAttack();
-	void WeaponSkill();
-	void MagicSkill();
 
 protected:
 

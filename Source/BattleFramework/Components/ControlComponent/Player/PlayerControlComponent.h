@@ -8,6 +8,7 @@
 
 class UPlayerControlStateBase;
 class UPlayerControlEffectBase;
+struct FInputActionValue;
 
 DECLARE_DELEGATE(FOnComponentReady);
 
@@ -44,4 +45,14 @@ public:
 	virtual void ActivateControlEffect(const FGameplayTag& ControlEffectTag) override;
 	virtual void ActivateControlEffectWithDuration(const FGameplayTag& ControlEffectTag, float Duration) override;
 	virtual void DeactivateControlEffect(const FGameplayTag& ControlEffectTag) override;
+
+	// Input Binding Functions
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+	void Dash();
+	void Sprint();
+	void Parry();
+	void BaseAttack();
+	void WeaponSkill();
+	void MagicSkill();
 };

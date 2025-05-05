@@ -144,3 +144,100 @@ void UPlayerControlComponent::DeactivateControlEffect(const FGameplayTag& Contro
 	}
 }
 
+// Input Binding Functions
+void UPlayerControlComponent::Move(const FInputActionValue& Value)
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->Move(Value);
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::Move : Invalid ControlState."));
+	}
+}
+
+void UPlayerControlComponent::Look(const FInputActionValue& Value)
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->Look(Value);
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::Look : Invalid ControlState."));
+	}
+}
+
+void UPlayerControlComponent::Dash()
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->Dash();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::Dash : Invalid ControlState."));
+	}
+}
+
+void UPlayerControlComponent::Sprint()
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->Sprint();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::Sprint : Invalid ControlState."));
+	}
+}
+
+void UPlayerControlComponent::Parry()
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->Parry();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::Parry : Invalid ControlState."));
+	}
+}
+
+void UPlayerControlComponent::BaseAttack()
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->BaseAttack();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::BaseAttack : Invalid ControlState."));
+	}
+}
+
+void UPlayerControlComponent::WeaponSkill()
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->WeaponSkill();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::WeaponSkill : Invalid ControlState."));
+	}
+}
+
+void UPlayerControlComponent::MagicSkill()
+{
+	if (IsValid(PlayerControlState))
+	{
+		PlayerControlState->MagicSkill();
+	}
+	else
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::MagicSkill : Invalid ControlState."));
+	}
+}
+

@@ -94,49 +94,49 @@ void ALSH_TestCharacter::BindInputFunctions()
 		// Moving
 		if (IsValid(MoveAction))
 		{
-			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ALSH_TestCharacter::Move);	
+			EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, ControlComponent.Get(), &UPlayerControlComponent::Move);	
 		}
 		
 		// Looking
 		if (IsValid(LookAction))
 		{
-			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ALSH_TestCharacter::Look);
+			EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, ControlComponent.Get(), &UPlayerControlComponent::Look);
 		}
 
 		// Dash
 		if (IsValid(DashAction))
 		{
-			EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::Dash);
+			EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, ControlComponent.Get(), &UPlayerControlComponent::Dash);
 		}
 
 		// Dash
 		if (IsValid(SprintAction))
 		{
-			EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::Sprint);
+			EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, ControlComponent.Get(), &UPlayerControlComponent::Sprint);
 		}
 
 		// Parry
 		if (IsValid(ParryAction))
 		{
-			EnhancedInputComponent->BindAction(ParryAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::Parry);
+			EnhancedInputComponent->BindAction(ParryAction, ETriggerEvent::Started, ControlComponent.Get(), &UPlayerControlComponent::Parry);
 		}
 
 		// BaseAttack
 		if (IsValid(BaseAttackAction))
 		{
-			EnhancedInputComponent->BindAction(BaseAttackAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::BaseAttack);
+			EnhancedInputComponent->BindAction(BaseAttackAction, ETriggerEvent::Started, ControlComponent.Get(), &UPlayerControlComponent::BaseAttack);
 		}
 
 		// WeaponSkill
 		if (IsValid(WeaponSkillAction))
 		{
-			EnhancedInputComponent->BindAction(WeaponSkillAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::WeaponSkill);
+			EnhancedInputComponent->BindAction(WeaponSkillAction, ETriggerEvent::Started, ControlComponent.Get(), &UPlayerControlComponent::WeaponSkill);
 		}
 
 		// MagicSkill
 		if (IsValid(MagicSkillAction))
 		{
-			EnhancedInputComponent->BindAction(MagicSkillAction, ETriggerEvent::Started, this, &ALSH_TestCharacter::MagicSkill);
+			EnhancedInputComponent->BindAction(MagicSkillAction, ETriggerEvent::Started, ControlComponent.Get(), &UPlayerControlComponent::MagicSkill);
 		}
 	}
 	else
@@ -144,101 +144,3 @@ void ALSH_TestCharacter::BindInputFunctions()
 		UE_LOG(LogTemp, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
-
-void ALSH_TestCharacter::Move(const FInputActionValue& Value)
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->Move(Value);
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::Move : Invalid ControlState."));
-	}
-}
-
-void ALSH_TestCharacter::Look(const FInputActionValue& Value)
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->Look(Value);
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::Look : Invalid ControlState."));
-	}
-}
-
-void ALSH_TestCharacter::Dash()
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->Dash();
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::Dash : Invalid ControlState."));
-	}
-}
-
-void ALSH_TestCharacter::Sprint()
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->Sprint();
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::Sprint : Invalid ControlState."));
-	}
-}
-
-void ALSH_TestCharacter::Parry()
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->Parry();
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::Parry : Invalid ControlState."));
-	}
-}
-
-void ALSH_TestCharacter::BaseAttack()
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->BaseAttack();
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::BaseAttack : Invalid ControlState."));
-	}
-}
-
-void ALSH_TestCharacter::WeaponSkill()
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->WeaponSkill();
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::WeaponSkill : Invalid ControlState."));
-	}
-}
-
-void ALSH_TestCharacter::MagicSkill()
-{
-	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
-	{
-		ControlState->MagicSkill();
-	}
-	else
-	{
-		Debug::PrintError(TEXT("ALSH_TestCharacter::MagicSkill : Invalid ControlState."));
-	}
-}
-
-
