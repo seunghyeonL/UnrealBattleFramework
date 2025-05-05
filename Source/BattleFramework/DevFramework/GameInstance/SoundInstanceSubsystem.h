@@ -6,7 +6,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Data/CachedSoundData.h"
 
-#include "DebugHelper.h"
+#include "Util/DebugHelper.h"
 
 #include "SoundInstanceSubsystem.generated.h"
 

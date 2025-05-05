@@ -6,7 +6,7 @@
 #include "Data/CachedSoundData.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "DebugHelper.h"
+#include "Util/DebugHelper.h"
 
 #if WITH_EDITOR
 TArray<FName> UAnimNotify_PlaySoundByName::GetAvailableSoundNames()
