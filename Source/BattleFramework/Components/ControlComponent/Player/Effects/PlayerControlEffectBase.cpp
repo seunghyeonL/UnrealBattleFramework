@@ -64,6 +64,13 @@ void UPlayerControlEffectBase::Activate(float Duration)
 		PlayerControlState->SetOuterState(this);
 		ControlComponent->SetPlayerControlState(this);
 		ControlComponent->GetActiveControlEffects().AddTag(ControlEffectTag);
+		GetOuter()->GetWorld()->GetTimerManager().SetTimer(
+			DurationTimer,
+			this,
+			&UPlayerControlEffectBase::Deactivate,
+			Duration,
+			false
+		);
 	}
 	else
 	{
@@ -98,6 +105,10 @@ void UPlayerControlEffectBase::Deactivate()
 	if (auto CastedOuterState = Cast<UPlayerControlEffectBase>(OuterState))
 	{
 		CastedOuterState->SetInnerState(InnerState);
+	}
+	else
+	{
+		ControlComponent->SetPlayerControlState(InnerState);
 	}
 
 	// Disconnect this

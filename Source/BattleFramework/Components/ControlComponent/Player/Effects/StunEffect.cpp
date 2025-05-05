@@ -33,7 +33,7 @@ void UStunEffect::Move(const FInputActionValue& Value)
 
 void UStunEffect::Look(const FInputActionValue& Value)
 {
-	// Super::Look(Value);
+	Super::Look(Value);
 }
 
 void UStunEffect::Dash()

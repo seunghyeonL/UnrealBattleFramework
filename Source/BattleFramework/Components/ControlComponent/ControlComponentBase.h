@@ -18,12 +18,12 @@ public:
 	// Sets default values for this component's properties
 	UControlComponentBase();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
-	FGameplayTagContainer ActiveControlEffectTags;
-
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	FGameplayTagContainer ActiveControlEffectTags;
 
 public:
 	// Called every frame
@@ -33,7 +33,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Effects")
 	FORCEINLINE FGameplayTagContainer& GetActiveControlEffects() { return ActiveControlEffectTags; };
 
+	UFUNCTION(BlueprintCallable, Category = "Effects")
 	virtual void ActivateControlEffect(const FGameplayTag& ControlEffectTag);
+	UFUNCTION(BlueprintCallable, Category = "Effects")
 	virtual void ActivateControlEffectWithDuration(const FGameplayTag& ControlEffectTag, float Duration);
+	UFUNCTION(BlueprintCallable, Category = "Effects")
 	virtual void DeactivateControlEffect(const FGameplayTag& ControlEffectTag);
 };
