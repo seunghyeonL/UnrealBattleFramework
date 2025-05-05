@@ -16,6 +16,9 @@ class BATTLEFRAMEWORK_API UPlayerControlStateBase : public UObject
 	GENERATED_BODY()
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<ACharacter> OwnerCharacter;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UPlayerControlStateBase> OuterState;
 
@@ -30,7 +33,9 @@ public:
 	virtual void WeaponSkill() {}
 	virtual void MagicSkill() {}
 
-	// OuterState Getter/Setter
+	// Getter/Setter
+	FORCEINLINE void SetOwnerCharacter(ACharacter* NewOwnerCharacter) { OwnerCharacter = NewOwnerCharacter; }
+	
 	FORCEINLINE virtual UPlayerControlStateBase* GetOuterState() const { return OuterState; }
 	FORCEINLINE void SetOuterState(UPlayerControlStateBase* NewOuterState) { OuterState = NewOuterState; }
 };

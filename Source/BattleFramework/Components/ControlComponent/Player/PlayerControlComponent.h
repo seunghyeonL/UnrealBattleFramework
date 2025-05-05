@@ -6,10 +6,10 @@
 #include "BattleFramework/Components/ControlComponent/ControlComponentBase.h"
 #include "PlayerControlComponent.generated.h"
 
-class UPlayerControlState;
-class UPlayerControlStateDecoratorBase;
+class UPlayerControlStateBase;
+class UPlayerControlEffectBase;
 
-DECLARE_DELEGATE(FOnStateComponentReady);
+DECLARE_DELEGATE(FOnComponentReady);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class BATTLEFRAMEWORK_API UPlayerControlComponent : public UControlComponentBase
@@ -20,28 +20,28 @@ public:
 	// Sets default values for this component's properties
 	UPlayerControlComponent();
 
-	FOnStateComponentReady OnStateComponentReady;
+	FOnComponentReady OnComponentReady;
 	bool bIsComponentReady;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effect")
-	TMap<EControlEffectType, UPlayerControlStateDecoratorBase*> ControlEffectMapper;
 	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UPlayerControlState> PlayerControlState;
+	TObjectPtr<UPlayerControlStateBase> PlayerControlState;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effect")
+	TMap<FGameplayTag, UPlayerControlEffectBase*> ControlEffectMapper;
 
 public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	FORCEINLINE UPlayerControlState* GetPlayerControlState() const { return PlayerControlState; };
-	FORCEINLINE void SetPlayerControlState(UPlayerControlState* NewState) { PlayerControlState = NewState; };
+	FORCEINLINE UPlayerControlStateBase* GetPlayerControlState() const { return PlayerControlState; };
+	FORCEINLINE void SetPlayerControlState(UPlayerControlStateBase* NewState) { PlayerControlState = NewState; };
 
-	virtual void ActivateControlEffect(EControlEffectType ControlEffectType) override;
-	virtual void ActivateControlEffectWithDuration(EControlEffectType ControlEffectType, float Duration) override;
-	virtual void DeactivateControlEffect(EControlEffectType ControlEffectType) override;
+	virtual void ActivateControlEffect(const FGameplayTag& ControlEffectTag) override;
+	virtual void ActivateControlEffectWithDuration(const FGameplayTag& ControlEffectTag, float Duration) override;
+	virtual void DeactivateControlEffect(const FGameplayTag& ControlEffectTag) override;
 };

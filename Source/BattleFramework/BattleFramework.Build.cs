@@ -14,7 +14,8 @@ public class BattleFramework : ModuleRules
 			"CoreUObject", 
 			"Engine", 
 			"InputCore", 
-			"EnhancedInput"
+			"EnhancedInput",
+			"GameplayTags"
 		});
 		
 		PrivateIncludePaths.Add("BattleFramework");

@@ -3,21 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PlayerControlStateBase.h"
-#include "PlayerControlState.generated.h"
+#include "PlayerControlEffectBase.h"
+#include "StunEffect.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTLEFRAMEWORK_API UPlayerControlState : public UPlayerControlStateBase
+class BATTLEFRAMEWORK_API UStunEffect : public UPlayerControlEffectBase
 {
 	GENERATED_BODY()
-protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner", meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<ACharacter> OwnerCharacter;
-	
+
 public:
+	UStunEffect();
+	
+	virtual void Activate() override;
+	virtual void Activate(float Duration) override;
+	virtual void Deactivate() override;
+	
 	virtual void Move(const FInputActionValue& Value) override;
 	virtual void Look(const FInputActionValue& Value) override;
 	virtual void Dash() override;
@@ -26,6 +29,4 @@ public:
 	virtual void BaseAttack() override;
 	virtual void WeaponSkill() override;
 	virtual void MagicSkill() override;
-
-	FORCEINLINE void SetOwnerCharacter(ACharacter* NewOwnerCharacter) { OwnerCharacter = NewOwnerCharacter; }
 };

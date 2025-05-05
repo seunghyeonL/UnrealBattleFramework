@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Util/EnumTypes.h"
+#include "Util/GameTagList.h"
 #include "ControlComponentBase.generated.h"
 
 // DECLARE_DELEGATE(FOnStateComponentReady);
@@ -18,12 +18,12 @@ public:
 	// Sets default values for this component's properties
 	UControlComponentBase();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
+	FGameplayTagContainer ActiveControlEffectTags;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "State")
-	TArray<EControlEffectType> ActiveControlEffects;
 
 public:
 	// Called every frame
@@ -31,9 +31,9 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Effects")
-	FORCEINLINE TArray<EControlEffectType>& GetActiveControlEffects() { return ActiveControlEffects; };
+	FORCEINLINE FGameplayTagContainer& GetActiveControlEffects() { return ActiveControlEffectTags; };
 
-	virtual void ActivateControlEffect(EControlEffectType ControlEffectType);
-	virtual void ActivateControlEffectWithDuration(EControlEffectType ControlEffectType, float Duration);
-	virtual void DeactivateControlEffect(EControlEffectType ControlEffectType);
+	virtual void ActivateControlEffect(const FGameplayTag& ControlEffectTag);
+	virtual void ActivateControlEffectWithDuration(const FGameplayTag& ControlEffectTag, float Duration);
+	virtual void DeactivateControlEffect(const FGameplayTag& ControlEffectTag);
 };

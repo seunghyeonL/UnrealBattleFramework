@@ -12,7 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Components/ControlComponent/Player/PlayerControlComponent.h"
-#include "Components/ControlComponent/Player/State/PlayerControlState.h"
+#include "Components/ControlComponent/Player/States/PlayerControlState.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ALSH_TestCharacter
@@ -84,10 +84,7 @@ void ALSH_TestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	{
 		BindInputFunctions();
 	}
-	else
-	{
-		ControlComponent->OnStateComponentReady.BindUObject(this, &ALSH_TestCharacter::BindInputFunctions);
-	}
+	ControlComponent->OnComponentReady.BindUObject(this, &ALSH_TestCharacter::BindInputFunctions);
 }
 
 void ALSH_TestCharacter::BindInputFunctions()
@@ -150,7 +147,7 @@ void ALSH_TestCharacter::BindInputFunctions()
 
 void ALSH_TestCharacter::Move(const FInputActionValue& Value)
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->Move(Value);
 	}
@@ -162,7 +159,7 @@ void ALSH_TestCharacter::Move(const FInputActionValue& Value)
 
 void ALSH_TestCharacter::Look(const FInputActionValue& Value)
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->Look(Value);
 	}
@@ -174,7 +171,7 @@ void ALSH_TestCharacter::Look(const FInputActionValue& Value)
 
 void ALSH_TestCharacter::Dash()
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->Dash();
 	}
@@ -186,7 +183,7 @@ void ALSH_TestCharacter::Dash()
 
 void ALSH_TestCharacter::Sprint()
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->Sprint();
 	}
@@ -198,7 +195,7 @@ void ALSH_TestCharacter::Sprint()
 
 void ALSH_TestCharacter::Parry()
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->Parry();
 	}
@@ -210,7 +207,7 @@ void ALSH_TestCharacter::Parry()
 
 void ALSH_TestCharacter::BaseAttack()
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->BaseAttack();
 	}
@@ -222,7 +219,7 @@ void ALSH_TestCharacter::BaseAttack()
 
 void ALSH_TestCharacter::WeaponSkill()
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->WeaponSkill();
 	}
@@ -234,7 +231,7 @@ void ALSH_TestCharacter::WeaponSkill()
 
 void ALSH_TestCharacter::MagicSkill()
 {
-	if (UPlayerControlState* ControlState = ControlComponent->GetPlayerControlState())
+	if (UPlayerControlState* ControlState = Cast<UPlayerControlState>(ControlComponent->GetPlayerControlState()))
 	{
 		ControlState->MagicSkill();
 	}

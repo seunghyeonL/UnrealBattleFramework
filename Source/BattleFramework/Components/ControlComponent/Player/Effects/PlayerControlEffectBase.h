@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "../State/PlayerControlStateBase.h"
-#include "Util/EnumTypes.h"
-#include "PlayerControlStateDecoratorBase.generated.h"
+#include "../States/PlayerControlStateBase.h"
+#include "Util/GameTagList.h"
+#include "PlayerControlEffectBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTLEFRAMEWORK_API UPlayerControlStateDecoratorBase : public UPlayerControlStateBase
+class BATTLEFRAMEWORK_API UPlayerControlEffectBase : public UPlayerControlStateBase
 {
 	GENERATED_BODY()
 
@@ -20,7 +20,7 @@ protected:
 	FTimerHandle DurationTimer;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State, meta = (AllowPrivateAccess = "true"))
-	EControlEffectType ControlEffectType;
+	FGameplayTag ControlEffectTag;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = State, meta = (AllowPrivateAccess = "true"))
 	bool bIsActive;

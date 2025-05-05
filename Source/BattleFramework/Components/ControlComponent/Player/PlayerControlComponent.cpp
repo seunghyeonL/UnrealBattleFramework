@@ -4,7 +4,12 @@
 #include "PlayerControlComponent.h"
 #include "Util/DebugHelper.h"
 #include "GameFramework/Character.h"
-#include "./State/PlayerControlState.h"
+#include "./States/PlayerControlState.h"
+#include "Effects/ConfusedEffect.h"
+#include "Effects/DeathEffect.h"
+#include "Effects/SilenceEffect.h"
+#include "Effects/StiffnessEffect.h"
+#include "Effects/StunEffect.h"
 
 
 // Sets default values for this component's properties
@@ -41,20 +46,30 @@ void UPlayerControlComponent::BeginPlay()
 	PlayerControlState->SetOwnerCharacter(OwnerCharacter);
 
 	// Initialize Effects 
-	ActiveControlEffects.Empty();
+	ActiveControlEffectTags.Reset();
 	ControlEffectMapper.Empty();
 
-	// ControlEffectMapper.Add(EControlEffectType::Stun, NewObject<UStunEffect>(this));
-	// ControlEffectMapper.Add(EControlEffectType::Stiffness, NewObject<UStiffnessEffect>(this));   
-	// ControlEffectMapper.Add(EControlEffectType::Silence, NewObject<USilenceEffect>(this));     
-	// ControlEffectMapper.Add(EControlEffectType::Confused, NewObject<UConfusedEffect>(this));  
-	//
-	// ControlEffectMapper.Add(EControlEffectType::UsingSkill, NewObject<UUsingSkillEffect>(this));  
-	// ControlEffectMapper.Add(EControlEffectType::Death, NewObject<UDeathEffect>(this));
+	// Add ControlEffects to ControlEffectMapper 
+	ControlEffectMapper.Add(EffectTags::Stun, NewObject<UStunEffect>(this));
+	ControlEffectMapper.Add(EffectTags::Stiffness, NewObject<UStiffnessEffect>(this));   
+	ControlEffectMapper.Add(EffectTags::Silence, NewObject<USilenceEffect>(this));     
+	ControlEffectMapper.Add(EffectTags::Confused, NewObject<UConfusedEffect>(this));  
 	
-	if (OnStateComponentReady.IsBound())
+	ControlEffectMapper.Add(EffectTags::Death, NewObject<UDeathEffect>(this));
+	// ControlEffectMapper.Add(EffectTags::UsingSkill, NewObject<UUsingSkillEffect>(this));
+	// ControlEffectMapper.Add(EffectTags::UsingParry, NewObject<UUsingParryEffect>(this));
+	// ControlEffectMapper.Add(EffectTags::UsingDash, NewObject<UUsingDasgEffect>(this));
+
+	// Set OwnerCharacter to ControlEffects
+	for (auto& [ControlEffectTag, ControlEffect] : ControlEffectMapper)
 	{
-		OnStateComponentReady.Execute();
+		ControlEffect->SetOwnerCharacter(OwnerCharacter);
+	}
+
+	// Notify Component Ready
+	if (OnComponentReady.IsBound())
+	{
+		OnComponentReady.Execute();
 	}
 	bIsComponentReady = true;
 }
@@ -69,24 +84,63 @@ void UPlayerControlComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	// ...
 }
 
-void UPlayerControlComponent::ActivateControlEffect(EControlEffectType ControlEffectType)
+void UPlayerControlComponent::ActivateControlEffect(const FGameplayTag& ControlEffectTag)
 {
-	Super::ActivateControlEffect(ControlEffectType);
+	Super::ActivateControlEffect(ControlEffectTag);
 
-	
+	if (!ControlEffectMapper.Contains(ControlEffectTag))
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::ActivateControlEffect : Tag Not Initialized in Mapper."));
+		return;
+	}
+
+	if (auto ControlEffect = ControlEffectMapper[ControlEffectTag])
+	{
+		ControlEffect->Activate();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UPlayerControlComponent::ActivateControlEffect : Invalid ControlEffect."))
+	}
 }
 
-void UPlayerControlComponent::ActivateControlEffectWithDuration(EControlEffectType ControlEffectType, float Duration)
+void UPlayerControlComponent::ActivateControlEffectWithDuration(const FGameplayTag& ControlEffectTag, float Duration)
 {
-	Super::ActivateControlEffectWithDuration(ControlEffectType, Duration);
+	Super::ActivateControlEffectWithDuration(ControlEffectTag, Duration);
 
-	
+	if (!ControlEffectMapper.Contains(ControlEffectTag))
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::ActivateControlEffect : Tag Not Initialized in Mapper."));
+		return;
+	}
+
+	if (auto ControlEffect = ControlEffectMapper[ControlEffectTag])
+	{
+		ControlEffect->Activate(Duration);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UPlayerControlComponent::ActivateControlEffect : Invalid ControlEffect."))
+	}
 }
 
-void UPlayerControlComponent::DeactivateControlEffect(EControlEffectType ControlEffectType)
+void UPlayerControlComponent::DeactivateControlEffect(const FGameplayTag& ControlEffectTag)
 {
-	Super::DeactivateControlEffect(ControlEffectType);
+	Super::DeactivateControlEffect(ControlEffectTag);
 
-	
+	if (!ControlEffectMapper.Contains(ControlEffectTag))
+	{
+		Debug::PrintError(TEXT("UPlayerControlComponent::DeactivateControlEffect : Tag Not Initialized in Mapper."));
+		return;
+	}
+
+	if (auto ControlEffect = ControlEffectMapper[ControlEffectTag])
+	{
+		ControlEffect->Deactivate();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("UPlayerControlComponent::DeactivateControlEffect : Invalid ControlEffect."))
+	}
 }
 
