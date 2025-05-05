@@ -2,7 +2,7 @@
 
 
 #include "PlayerControlComponent.h"
-#include "DebugHelper.h"
+#include "Util/DebugHelper.h"
 #include "GameFramework/Character.h"
 #include "./State/PlayerControlState.h"
 
@@ -17,23 +17,6 @@ UPlayerControlComponent::UPlayerControlComponent()
 	bIsComponentReady = false;
 	PlayerControlState = nullptr;
 	// ...
-}
-
-
-void UPlayerControlComponent::Initialize()
-{
-	ActiveControlEffects.Empty();
-	ControlEffectMapper.Empty();
-
-	// Create ControlEffect Instances
-
-	// ControlEffectMapper.Add(EControlEffectType::Stun, NewObject<UStunEffect>(this));
-	// ControlEffectMapper.Add(EControlEffectType::Stiffness, NewObject<UStiffnessEffect>(this));   
-	// ControlEffectMapper.Add(EControlEffectType::Silence, NewObject<USilenceEffect>(this));     
-	// ControlEffectMapper.Add(EControlEffectType::Confused, NewObject<UConfusedEffect>(this));  
-	//
-	// ControlEffectMapper.Add(EControlEffectType::UsingSkill, NewObject<UUsingSkillEffect>(this));  
-	// ControlEffectMapper.Add(EControlEffectType::Death, NewObject<UDeathEffect>(this));       
 }
 
 // Called when the game starts
@@ -56,7 +39,18 @@ void UPlayerControlComponent::BeginPlay()
 		return;
 	}
 	PlayerControlState->SetOwnerCharacter(OwnerCharacter);
-	
+
+	// Initialize Effects 
+	ActiveControlEffects.Empty();
+	ControlEffectMapper.Empty();
+
+	// ControlEffectMapper.Add(EControlEffectType::Stun, NewObject<UStunEffect>(this));
+	// ControlEffectMapper.Add(EControlEffectType::Stiffness, NewObject<UStiffnessEffect>(this));   
+	// ControlEffectMapper.Add(EControlEffectType::Silence, NewObject<USilenceEffect>(this));     
+	// ControlEffectMapper.Add(EControlEffectType::Confused, NewObject<UConfusedEffect>(this));  
+	//
+	// ControlEffectMapper.Add(EControlEffectType::UsingSkill, NewObject<UUsingSkillEffect>(this));  
+	// ControlEffectMapper.Add(EControlEffectType::Death, NewObject<UDeathEffect>(this));
 	
 	if (OnStateComponentReady.IsBound())
 	{

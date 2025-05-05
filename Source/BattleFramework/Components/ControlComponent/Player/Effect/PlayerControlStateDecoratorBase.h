@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
 #include "../State/PlayerControlStateBase.h"
-#include "Data/EnumTypes.h"
+#include "Util/EnumTypes.h"
 #include "PlayerControlStateDecoratorBase.generated.h"
 
 /**

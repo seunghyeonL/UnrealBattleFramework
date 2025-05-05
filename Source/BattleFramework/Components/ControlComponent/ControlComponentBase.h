@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Data/EnumTypes.h"
+#include "Util/EnumTypes.h"
 #include "ControlComponentBase.generated.h"
 
 // DECLARE_DELEGATE(FOnStateComponentReady);
@@ -17,7 +17,6 @@ class BATTLEFRAMEWORK_API UControlComponentBase : public UActorComponent
 public:
 	// Sets default values for this component's properties
 	UControlComponentBase();
-
 
 protected:
 	// Called when the game starts

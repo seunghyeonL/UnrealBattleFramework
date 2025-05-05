@@ -33,8 +33,8 @@ enum class EStatusEffectType : uint8
 UENUM(BlueprintType)
 enum class EPawnStatType : uint8
 {
-	Health,
-	Stamina,
+	MaxHealth,
+	MaxStamina,
 	AttackPower,
 	Defense,
 	StaggerGauge,

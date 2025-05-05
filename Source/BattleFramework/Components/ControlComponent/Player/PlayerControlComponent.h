@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "BattleFramework/Components/ControlComponent/ControlComponentBase.h"
-#include "Data/EnumTypes.h"
 #include "PlayerControlComponent.generated.h"
 
 class UPlayerControlState;
@@ -26,8 +25,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Effect")
 	TMap<EControlEffectType, UPlayerControlStateDecoratorBase*> ControlEffectMapper;
-
-	void Initialize();
 	
 protected:
 	// Called when the game starts
