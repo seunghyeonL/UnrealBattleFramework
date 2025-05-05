@@ -18,6 +18,12 @@ public class BattleFramework : ModuleRules
 			"GameplayTags"
 		});
 		
+		// 에디터에서만 UnrealEd 모듈 추가
+		if (Target.bBuildEditor)
+		{
+			PublicDependencyModuleNames.AddRange(new string[] { "UnrealEd" });
+		}
+		
 		PrivateIncludePaths.Add("BattleFramework");
 	}
 }
